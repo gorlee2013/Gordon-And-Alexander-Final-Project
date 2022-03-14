@@ -6,12 +6,12 @@ function computeMachineCode(){
 	var ValidInstruction;
 	var reg1, reg2;
 	var exit = 0;
+	var pos = "";
 	var arr = inputCode.split("\n");
 	var arrLength = arr.length;
 	let newLine;
 	for(let i=0;i<arrLength;i++){
 		newLine = arr[i];
-		console.log(newLine);
 		newLine = newLine.replace(/\s+/g, "");
 		validInstruction = 0;
 		//while(newLine== ""){
@@ -38,22 +38,36 @@ function computeMachineCode(){
 			machineCode+="10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("nop","");
 		}
-		else if(newLine.indexOf("rrmovl ")==0)
+		else if(newLine.indexOf("rrmovl")==0)
 		{
 			machineCode+="20 ";
-			newLine=newLine.replace("rrmovl ","");
+			newLine=newLine.replace("rrmovl","");
 			reg1 = Register(newLine);
-			if(reg1!=-1){
+			if(reg1!="F"){
 				machineCode+=reg1;
-				 newLine = newLine.substring(6);
-			}
-			reg2 = Register(newLine);
-			if(reg2!=-1){
-				machineCode+=reg2;
 				 newLine = newLine.substring(5);
 			}
-
+			reg2 = Register(newLine);
+			if(reg2!="F"){
+				machineCode+=reg2;
+				 newLine = newLine.substring(4);
+			}
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+
+
+
+
+
+		else if(newLine.indexOf(".pos")==0) // getting position
+		{
+			newLine=newLine.replace(".pos","");
+			if (newLine != ""){
+			}
+			while(/[0-9]|[A-F]|\x/.test(newLine.substring(0,1))){
+				pos += newLine.substring(0,1);
+				newLine = newLine.substring(1);
+			}
 		}
 
 
@@ -90,14 +104,14 @@ function Register(string)
 	else if(string.indexOf("%rdx")==0)
 		return 9;
 	else if(string.indexOf("%r10")==0)
-		return A;
+		return "A";
 	else if(string.indexOf("%r11")==0)
-		return B;
+		return "B";
 	else if(string.indexOf("%r12")==0)
-		return C;
+		return "C";
 	else if(string.indexOf("%r13")==0)
-		return D;
+		return "D";
 	else if(string.indexOf("%r14")==0)
-		return E;
-	else return F; //no register
+		return "E";
+	else return "F"; //no register
 }
