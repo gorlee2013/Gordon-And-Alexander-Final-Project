@@ -27,7 +27,7 @@ function computeMachineCode(){
 		}
 		if(newLine.indexOf("halt")!=-1)
 		{
-			machineCode+="0000"
+			machineCode+="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("halt","");
 		}
 		else if(newLine.indexOf("nop")!=-1)
