@@ -54,7 +54,29 @@ function computeMachineCode(){
 			}
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
+		else if(newLine.indexOf("irmovl")==0)
+		{
+			machineCode+="30 ";
 
+			newLine=newLine.replace("rrmovl","");
+			var inputValue = parseInt(newLine.subString(0,newLine.indexOf(",")));
+			var hexValue = "";
+			while(inputValue>0){
+				hexValue += inputValue%16;
+				inputValue = Math.floor(inputValue/16);
+			}
+			for(int i = hexValue.length();i<=8;i++)
+				hexValue+=0;
+			reg1 = Register(newLine);
+			if(reg1!="F"){
+				machineCode+="F"+reg1+" ";
+				 newLine = newLine.substring(newLine.indexOf(","+4);
+			}
+			 for(int i=0;i<4;i++)
+				 machineCode+=hexValue.substring(i*2+1,i*2+2)+hexValue.substring(i*2,i*2+1)+" ";
+			
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
 
 
 
@@ -71,7 +93,7 @@ function computeMachineCode(){
 		}
 
 
-		if(newLine!=="") // improper input will not be replaced with ""
+		if(newLine!==""||newLine.substring(length-1,1)!=":") // improper input will not be replaced with "", or input could be a loop: which is ignored
 		{
 			document.getElementById("MachineCode").innerHTML = "Improper Input";
 			return;
