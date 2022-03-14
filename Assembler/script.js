@@ -7,35 +7,38 @@ function computeMachineCode(){
 	var reg1, reg2;
 	var exit = 0;
 	var arr = inputCode.split("\n");
+	var arrLength = arr.length;
 	let newLine;
-	for(let i=0;i<arr.length;i++){
+	for(let i=0;i<arrLength;i++){
 		newLine = arr[i];
+		console.log(newLine);
+		newLine = newLine.replace(/\s+/g, "");
 		validInstruction = 0;
 		//while(newLine== ""){
 			//inputCode += inputCode.replace("\n","");
 			//newLine += inputCode.substring(0,inputCode.indexOf("\n"));
 		//}
-		if(newLine.indexOf("Main:")!=-1)
+		if(newLine.indexOf("Main:")==0)
 		{
 			hasMain=1;
 			newLine=newLine.replace("Main:","");
 		}
-		if(newLine.indexOf("Stack:")!=-1)
+		if(newLine.indexOf("Stack:")==0)
 		{
 			hasStack=1;
 			newLine=newLine.replace("Stack:","");
 		}
-		if(newLine.indexOf("halt")!=-1)
+		if(newLine.indexOf("halt")==0)
 		{
 			machineCode+="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("halt","");
 		}
-		else if(newLine.indexOf("nop")!=-1)
+		else if(newLine.indexOf("nop")==0)
 		{
 			machineCode+="10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("nop","");
 		}
-		else if(newLine.indexOf("rrmovl ")!=-1)
+		else if(newLine.indexOf("rrmovl ")==0)
 		{
 			machineCode+="20 ";
 			newLine=newLine.replace("rrmovl ","");
@@ -54,7 +57,7 @@ function computeMachineCode(){
 		}
 
 
-		if(newLine!=="")
+		if(newLine!=="") // improper input will not be replaced with ""
 		{
 			document.getElementById("MachineCode").innerHTML = "Improper Input";
 			return;
