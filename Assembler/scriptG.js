@@ -10,6 +10,7 @@ function computeMachineCode(){
 	var arr = inputCode.split("\n");
 	var arrLength = arr.length;
 	let newLine;
+	let mem = new Array(1600); // not implemented yet
 	for(let i=0;i<arrLength;i++){
 		newLine = arr[i];
 		newLine = newLine.replace(/\s+/g, "");
@@ -38,10 +39,10 @@ function computeMachineCode(){
 			machineCode+="10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("nop","");
 		}
-		else if(newLine.indexOf("rrmovl")==0) // rrmovl
+		else if(newLine.indexOf("rrmovq")==0) // rrmovl
 		{
 			machineCode+="20 ";
-			newLine=newLine.replace("rrmovl","");
+			newLine=newLine.replace("rrmovq","");
 			reg1 = Register(newLine);
 			if(reg1!="F"){
 				machineCode+=reg1;
@@ -54,10 +55,10 @@ function computeMachineCode(){
 			}
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
-		else if(newLine.indexOf("irmovl")==0) //irmovl
+		else if(newLine.indexOf("irmovq")==0) //irmovl
 		{
 			machineCode+="30 F"
-			newLine=newLine.replace("irmovl","");
+			newLine=newLine.replace("irmovq","");
 			var cmma = newLine.indexOf(",")
 			var V = toHex(newLine.substring(0,cmma));
 			newLine = newLine.substring(cmma + 1);
@@ -67,9 +68,34 @@ function computeMachineCode(){
 			machineCode+=" " + V + " ";
 			machineCode=Padding(machineCode);
 		}
+		/*
+		console.log("1: " + machineCode);
+		console.log("2: " + machineCode);
+		console.log("3: " + machineCode);
+		console.log("V: " + V);
+		*/
+
+		else if(newLine.indexOf("rmmovq")==0) //rmmovl
+		{
+			machineCode+="40 "
+			newLine=newLine.replace("rmmovq","");
+			var cmma = newLine.indexOf(",");
+			reg1 = Register(newLine.substring(0,cmma));
+			var p1 = newLine.indexOf("(");
+			var p2 = newLine.indexOf(")");
+			reg2 = Register(newLine.substring(p1+1,p2));
+			console.log("Reg1: " + reg1)
+			console.log("Reg2: " + reg2)
+			console.log("Reg12: " + reg1 + reg2)
+			console.log("RegM12: " + machineCode + reg1 + reg2)
 
 
-
+			var D = toHex(newLine.substring(cmma+1,p1));
+			newLine="";
+			machineCode+=reg1;
+			machineCode+=reg2  + " " + D + " ";
+			machineCode=Padding(machineCode);
+		}
 
 		else if(newLine.indexOf(".pos")==0) // getting position
 		{
@@ -99,6 +125,9 @@ function toHex (string){ // convert value to hex with 1 byte spacing
 	var n = +string;
 	n = n.toString(16); //number = parseInt(hexString, 16); to reverse
 	console.log("not spaced: " + n);
+	if (n.length%2==1) {
+		n = n + "0"
+	}
   n = n.replace(/.{1,2}(?=(.{2})+$)/g, '$& '); // add space every 2 characters (1 byte)
 	console.log("spaced: " + n);
 	return n;
