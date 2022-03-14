@@ -18,27 +18,27 @@ function computeMachineCode(){
 			//inputCode += inputCode.replace("\n","");
 			//newLine += inputCode.substring(0,inputCode.indexOf("\n"));
 		//}
-		if(newLine.indexOf("Main:")==0)
+		if(newLine.indexOf("Main:")==0) // Main:
 		{
 			hasMain=1;
 			newLine=newLine.replace("Main:","");
 		}
-		if(newLine.indexOf("Stack:")==0)
+		if(newLine.indexOf("Stack:")==0) // Stack:
 		{
 			hasStack=1;
 			newLine=newLine.replace("Stack:","");
 		}
-		if(newLine.indexOf("halt")==0)
+		if(newLine.indexOf("halt")==0) // halt
 		{
 			machineCode+="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("halt","");
 		}
-		else if(newLine.indexOf("nop")==0)
+		else if(newLine.indexOf("nop")==0) // nop
 		{
 			machineCode+="10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("nop","");
 		}
-		else if(newLine.indexOf("rrmovl")==0)
+		else if(newLine.indexOf("rrmovl")==0) // rrmovl
 		{
 			machineCode+="20 ";
 			newLine=newLine.replace("rrmovl","");
@@ -54,28 +54,18 @@ function computeMachineCode(){
 			}
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
-		else if(newLine.indexOf("irmovl")==0)
+		else if(newLine.indexOf("irmovl")==0) //irmovl
 		{
-			machineCode+="30 ";
-
-			newLine=newLine.replace("rrmovl","");
-			var inputValue = parseInt(newLine.subString(0,newLine.indexOf(",")));
-			var hexValue = "";
-			while(inputValue>0){
-				hexValue += inputValue%16;
-				inputValue = Math.floor(inputValue/16);
-			}
-			for(int i = hexValue.length();i<=8;i++)
-				hexValue+=0;
+			machineCode+="30 F"
+			newLine=newLine.replace("irmovl","");
+			var cmma = newLine.indexOf(",")
+			var V = toHex(newLine.substring(0,cmma));
+			newLine = newLine.substring(cmma + 1);
 			reg1 = Register(newLine);
-			if(reg1!="F"){
-				machineCode+="F"+reg1+" ";
-				 newLine = newLine.substring(newLine.indexOf(","+4);
-			}
-			 for(int i=0;i<4;i++)
-				 machineCode+=hexValue.substring(i*2+1,i*2+2)+hexValue.substring(i*2,i*2+1)+" ";
-			
-			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 ";
+			newLine="";
+			machineCode+=reg1;
+			machineCode+=" " + V + " ";
+			machineCode=Padding(machineCode);
 		}
 
 
@@ -86,14 +76,14 @@ function computeMachineCode(){
 			newLine=newLine.replace(".pos","");
 			if (newLine != ""){
 			}
-			while(/[0-9]|[A-F]|\x/.test(newLine.substring(0,1))){
+			while(/[0-9]|[A-F]|\x/.test(newLine.substring(0,1))){ //reg exp to get pos (can probably change to get whole number)
 				pos += newLine.substring(0,1);
 				newLine = newLine.substring(1);
 			}
 		}
 
 
-		if(newLine!==""||newLine.substring(length-1,1)!=":") // improper input will not be replaced with "", or input could be a loop: which is ignored
+		if(newLine!=="") // improper input will not be replaced with ""
 		{
 			document.getElementById("MachineCode").innerHTML = "Improper Input";
 			return;
@@ -103,7 +93,27 @@ function computeMachineCode(){
 	document.getElementById("MachineCode").innerHTML = machineCode;
 
 }
-function Register(string)
+function toHex (string){ // convert value to hex with 1 byte spacing
+	if(string.indexOf("$")== 0)
+		string = string.substring(1);
+	var n = +string;
+	n = n.toString(16); //number = parseInt(hexString, 16); to reverse
+	console.log("not spaced: " + n);
+  n = n.replace(/.{1,2}(?=(.{2})+$)/g, '$& '); // add space every 2 characters (1 byte)
+	console.log("spaced: " + n);
+	return n;
+}
+
+function Padding(string){ // add padding to 16 bytes (does not add space to beginning)
+	var add = (48 - string.length);
+	while ((add-3) >= 0){
+		string += "00 ";
+		add = add-3;
+	}
+	return string;
+}
+
+function Register(string) // get register number
 {
 	if(string.indexOf("%rax")== 0)
 		return 0;
