@@ -84,14 +84,24 @@ function computeMachineCode(){
 			var p1 = newLine.indexOf("(");
 			var p2 = newLine.indexOf(")");
 			reg2 = Register(newLine.substring(p1+1,p2));
-			console.log("Reg1: " + reg1)
-			console.log("Reg2: " + reg2)
-			console.log("Reg12: " + reg1 + reg2)
-			console.log("RegM12: " + machineCode + reg1 + reg2)
-
-
 			var D = toHex(newLine.substring(cmma+1,p1));
 			newLine="";
+			machineCode+=reg1;
+			machineCode+=reg2  + " " + D + " ";
+			machineCode=Padding(machineCode);
+		}
+
+		else if(newLine.indexOf("mrmovq")==0) //mrmovq
+		{
+			machineCode+="50 "
+			newLine=newLine.replace("mrmovq","");
+			var cmma = newLine.indexOf(",");
+			var p1 = newLine.indexOf("(");
+			var p2 = newLine.indexOf(")");
+			reg2 = Register(newLine.substring(p1+1,p2));
+			var D = toHex(newLine.substring(0,p1));
+			reg1 = Register(newLine.substring(cmma+1));
+			newLine = "";
 			machineCode+=reg1;
 			machineCode+=reg2  + " " + D + " ";
 			machineCode=Padding(machineCode);
