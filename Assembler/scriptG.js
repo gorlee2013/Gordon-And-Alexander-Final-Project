@@ -1,31 +1,26 @@
 function computeMachineCode(){
 	let inputCode = document.getElementById("textbox").value;
 	let machineCode="";
-	var hasMain = 0;
-	var hasStack = 0;
+	var main = 0;
+	var stack = 0;
 	var ValidInstruction;
 	var reg1, reg2;
 	var exit = 0;
 	var pos = "";
 	var arr = inputCode.split("\n");
-	var arrLength = arr.length;
 	let newLine;
-	for(let i=0;i<arrLength;i++){
+	for(let i=0;i<arr.length;i++){
 		newLine = arr[i];
 		newLine = newLine.replace(/\s+/g, "");
 		validInstruction = 0;
-		//while(newLine== ""){
-			//inputCode += inputCode.replace("\n","");
-			//newLine += inputCode.substring(0,inputCode.indexOf("\n"));
-		//}
 		if(newLine.indexOf("Main:")==0) // Main:
 		{
-			hasMain=1;
+			main=pos;
 			newLine=newLine.replace("Main:","");
 		}
 		if(newLine.indexOf("Stack:")==0) // Stack:
 		{
-			hasStack=1;
+			stack=pos;
 			newLine=newLine.replace("Stack:","");
 		}
 		if(newLine.indexOf("halt")==0) // halt
@@ -341,22 +336,48 @@ function computeMachineCode(){
 			machineCode+=reg1;
 			machineCode+="F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
-
-
-
 		else if(newLine.indexOf(".pos")==0) // getting position
 		{
+			pos=0;
 			newLine=newLine.replace(".pos","");
-			if (newLine != ""){
-			}
-			while(/[0-9]|[A-F]|\x/.test(newLine.substring(0,1))){ //reg exp to get pos (can probably change to get whole number)
+			var pos = parseInt(newLine);
+			newLine = "";
+			/*
+			while(/[0-9]|[A-F]|/.test(newLine.substring(0,1))){ //reg exp to get pos (can probably change to get whole number)
 				pos += newLine.substring(0,1);
 				newLine = newLine.substring(1);
 			}
+			*/
+			while(pos*3>machineCode.length)
+				machineCode+="00 ";
 		}
-
-
-		if(newLine!=="") // improper input will not be replaced with ""
+	else if(newLine.indexOf(".align")==0) // aligns to x byte boundary
+		{
+			newLine=newLine.replace(".align","");
+			var alignBytes = parseInt(newLine);
+			newLine = "";
+			while(machineCode.length%(alignBytes*3)!=0)
+				machineCode+="00 ";
+		if(newLine!=="")
+		{
+			document.getElementById("MachineCode").innerHTML = "Improper Input";
+			return;
+		}
+	}
+	else if(newLine.indexOf(".quad")==0) // put an 8-byte value x at the current address
+		{
+			newLine=newLine.replace(".quad","");
+			if (newLine.substring(0,2) == "0x"){
+				newLine=newLine.replace("0x","");
+			}
+			if(newLine.length%2!=0)
+				newLine+="0";
+			while(newLine!=""){
+				machineCode+=newLine.substring(0,2)+" ";
+				newLine = newLine.substring(2);
+			}
+		}
+		if(newLine!=="")
 		{
 			document.getElementById("MachineCode").innerHTML = "Improper Input";
 			return;
@@ -364,8 +385,8 @@ function computeMachineCode(){
 	}
 
 	document.getElementById("MachineCode").innerHTML = machineCode;
-
 }
+
 function toHex (string){ // convert value to hex with 1 byte spacing
 	if(string.indexOf("$")== 0)
 		string = string.substring(1);
@@ -379,6 +400,7 @@ function toHex (string){ // convert value to hex with 1 byte spacing
 	console.log("spaced: " + n);
 	return n;
 }
+
 
 function Padding(string){ // add padding to 16 bytes (does not add space to beginning)
 	var add = (48 - string.length);
@@ -432,3 +454,29 @@ function Register(string) // get register number
 		return "E";
 	else return "F"; //no register
 }
+
+/* Test:
+.pos 2
+Main:
+popq %rax
+.quad 0xA100A200A300A400
+.align 16
+.pos 0x6A
+rrmovq %rax, r10
+addq %r13, %rbx
+irmovq $19, %rax
+.align 16
+ret
+00 00 B0 0F 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 A1 00 A2 00 A3 00 A4 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 20 0A 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 60 D3 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 30 F0 13 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+*/
