@@ -44,15 +44,11 @@ function computeMachineCode(){
 			machineCode+="20 ";
 			newLine=newLine.replace("rrmovq","");
 			reg1 = Register(newLine);
-			if(reg1!="F"){
-				machineCode+=reg1;
-				 newLine = newLine.substring(5);
-			}
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
 			reg2 = Register(newLine);
-			if(reg2!="F"){
-				machineCode+=reg2;
-				 newLine = newLine.substring(4);
-			}
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
 		else if(newLine.indexOf("irmovq")==0) //irmovq V, rB
@@ -109,6 +105,59 @@ function computeMachineCode(){
 			pad+=reg2  + " " + D + " ";
 			machineCode+=Padding(pad,3);
 		}
+		// operations
+		else if(newLine.indexOf("addq")==0) //addq rA, rB
+		{
+			var pad = "";
+			machineCode+="60 "
+			newLine=newLine.replace("addq","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("subq")==0) //subq rA, rB
+		{
+			var pad = "";
+			machineCode+="61 "
+			newLine=newLine.replace("subq","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("andq")==0) //andq rA, rB
+		{
+			var pad = "";
+			machineCode+="62 "
+			newLine=newLine.replace("andq","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("xorq")==0) //xorq rA, rB
+		{
+			var pad = "";
+			machineCode+="63 "
+			newLine=newLine.replace("xorq","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
 
 		else if(newLine.indexOf(".pos")==0) // getting position
 		{
@@ -155,7 +204,7 @@ function Padding(string){ // add padding to 16 bytes (does not add space to begi
 	return string;
 }
 
-function Padding(string, n){ // add padding to 16 bytes (does not add space to beginning)
+function Padding(string, n){ // add padding to 16 bytes (takes in characters already used n)
 	var add = (48 - string.length - n);
 	while ((add-3) >= 0){
 		string += "00 ";
