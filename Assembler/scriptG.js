@@ -39,7 +39,7 @@ function computeMachineCode(){
 			machineCode+="10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("nop","");
 		}
-		else if(newLine.indexOf("rrmovq")==0) // rrmovl
+		else if(newLine.indexOf("rrmovq")==0) // rrmovq rA, rB
 		{
 			machineCode+="20 ";
 			newLine=newLine.replace("rrmovq","");
@@ -55,8 +55,9 @@ function computeMachineCode(){
 			}
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
-		else if(newLine.indexOf("irmovq")==0) //irmovl
+		else if(newLine.indexOf("irmovq")==0) //irmovq V, rB
 		{
+			var pad = "";
 			machineCode+="30 F"
 			newLine=newLine.replace("irmovq","");
 			var cmma = newLine.indexOf(",")
@@ -64,9 +65,9 @@ function computeMachineCode(){
 			newLine = newLine.substring(cmma + 1);
 			reg1 = Register(newLine);
 			newLine="";
-			machineCode+=reg1;
-			machineCode+=" " + V + " ";
-			machineCode=Padding(machineCode);
+			pad+=reg1;
+			pad+=" " + V + " ";
+			machineCode+=Padding(pad, 4);
 		}
 		/*
 		console.log("1: " + machineCode);
@@ -75,8 +76,9 @@ function computeMachineCode(){
 		console.log("V: " + V);
 		*/
 
-		else if(newLine.indexOf("rmmovq")==0) //rmmovl
+		else if(newLine.indexOf("rmmovq")==0) //rmmovq rA, D(rB)
 		{
+			var pad = "";
 			machineCode+="40 "
 			newLine=newLine.replace("rmmovq","");
 			var cmma = newLine.indexOf(",");
@@ -86,13 +88,14 @@ function computeMachineCode(){
 			reg2 = Register(newLine.substring(p1+1,p2));
 			var D = toHex(newLine.substring(cmma+1,p1));
 			newLine="";
-			machineCode+=reg1;
-			machineCode+=reg2  + " " + D + " ";
-			machineCode=Padding(machineCode);
+			pad+=reg1;
+			pad+=reg2  + " " + D + " ";
+			machineCode+=Padding(pad, 3);
 		}
 
-		else if(newLine.indexOf("mrmovq")==0) //mrmovq
+		else if(newLine.indexOf("mrmovq")==0) //mrmovq D(rB), rA
 		{
+			var pad = "";
 			machineCode+="50 "
 			newLine=newLine.replace("mrmovq","");
 			var cmma = newLine.indexOf(",");
@@ -102,9 +105,9 @@ function computeMachineCode(){
 			var D = toHex(newLine.substring(0,p1));
 			reg1 = Register(newLine.substring(cmma+1));
 			newLine = "";
-			machineCode+=reg1;
-			machineCode+=reg2  + " " + D + " ";
-			machineCode=Padding(machineCode);
+			pad+=reg1;
+			pad+=reg2  + " " + D + " ";
+			machineCode+=Padding(pad,3);
 		}
 
 		else if(newLine.indexOf(".pos")==0) // getting position
@@ -145,6 +148,15 @@ function toHex (string){ // convert value to hex with 1 byte spacing
 
 function Padding(string){ // add padding to 16 bytes (does not add space to beginning)
 	var add = (48 - string.length);
+	while ((add-3) >= 0){
+		string += "00 ";
+		add = add-3;
+	}
+	return string;
+}
+
+function Padding(string, n){ // add padding to 16 bytes (does not add space to beginning)
+	var add = (48 - string.length - n);
 	while ((add-3) >= 0){
 		string += "00 ";
 		add = add-3;
