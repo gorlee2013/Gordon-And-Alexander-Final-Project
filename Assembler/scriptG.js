@@ -6,7 +6,7 @@ function computeMachineCode(){
 	var ValidInstruction;
 	var reg1, reg2;
 	var exit = 0;
-	var pos = "";
+	var pos = 0; // in bytes
 	var arr = inputCode.split("\n");
 	let newLine;
 	for(let i=0;i<arr.length;i++){
@@ -17,21 +17,25 @@ function computeMachineCode(){
 		{
 			main=pos;
 			newLine=newLine.replace("Main:","");
+			console.log("Main: " + main)
 		}
 		if(newLine.indexOf("Stack:")==0) // Stack:
 		{
 			stack=pos;
 			newLine=newLine.replace("Stack:","");
+			console.log("Stack: " + stack)
 		}
 		if(newLine.indexOf("halt")==0) // halt
 		{
 			machineCode+="00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("halt","");
+			pos += 16;
 		}
 		else if(newLine.indexOf("nop")==0) // nop
 		{
 			machineCode+="10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("nop","");
+			pos += 16;
 		}
 		// moves
 		else if(newLine.indexOf("rrmovq")==0) // rrmovq rA, rB
@@ -45,6 +49,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("cmovle")==0) // cmovle rA, rB
 		{
@@ -57,6 +62,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("cmovl")==0) // cmovl rA, rB
 		{
@@ -69,6 +75,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("cmove")==0) // cmove rA, rB
 		{
@@ -81,6 +88,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("cmovne")==0) // cmovne rA, rB
 		{
@@ -93,6 +101,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("cmovge")==0) // cmovge rA, rB
 		{
@@ -105,6 +114,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("cmovg")==0) // cmovg rA, rB
 		{
@@ -117,6 +127,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		// end of moves
 
@@ -133,6 +144,7 @@ function computeMachineCode(){
 			pad+=reg1;
 			pad+=" " + V + " ";
 			machineCode+=Padding(pad, 4);
+			pos += 16;
 		}
 		/*
 		console.log("1: " + machineCode);
@@ -156,6 +168,7 @@ function computeMachineCode(){
 			pad+=reg1;
 			pad+=reg2  + " " + D + " ";
 			machineCode+=Padding(pad, 3);
+			pos += 16;
 		}
 
 		else if(newLine.indexOf("mrmovq")==0) //mrmovq D(rB), rA
@@ -173,6 +186,7 @@ function computeMachineCode(){
 			pad+=reg1;
 			pad+=reg2  + " " + D + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		// operations
 		else if(newLine.indexOf("addq")==0) //addq rA, rB
@@ -187,6 +201,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("subq")==0) //subq rA, rB
 		{
@@ -200,6 +215,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("andq")==0) //andq rA, rB
 		{
@@ -213,6 +229,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("xorq")==0) //xorq rA, rB
 		{
@@ -226,6 +243,7 @@ function computeMachineCode(){
 			machineCode+=reg2;
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		//end of operations
 		// jumps
@@ -238,6 +256,7 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		else if(newLine.indexOf("jle")==0) //jle Dest
 		{
@@ -248,6 +267,7 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		else if(newLine.indexOf("jl")==0) //jl Dest
 		{
@@ -258,6 +278,7 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		else if(newLine.indexOf("je")==0) //je Dest
 		{
@@ -268,6 +289,7 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		else if(newLine.indexOf("jne")==0) //jne Dest
 		{
@@ -278,6 +300,7 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		else if(newLine.indexOf("jge")==0) //jge Dest
 		{
@@ -288,6 +311,7 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		else if(newLine.indexOf("jg")==0) //jg Dest
 		{
@@ -298,6 +322,7 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		//end of jumps
 
@@ -310,11 +335,13 @@ function computeMachineCode(){
 			newLine = "";
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
+			pos += 16;
 		}
 		else if(newLine.indexOf("ret")==0) // ret
 		{
 			machineCode+="90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("ret","");
+			pos += 16;
 		}
 		else if(newLine.indexOf("pushq")==0) //pushq rA
 		{
@@ -325,6 +352,7 @@ function computeMachineCode(){
 			newLine = newLine.substring(4);
 			machineCode+=reg1;
 			machineCode+="F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf("popq")==0) //popq rA
 		{
@@ -335,19 +363,13 @@ function computeMachineCode(){
 			newLine = newLine.substring(4);
 			machineCode+=reg1;
 			machineCode+="F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+			pos += 16;
 		}
 		else if(newLine.indexOf(".pos")==0) // getting position
 		{
-			pos=0;
 			newLine=newLine.replace(".pos","");
-			var pos = parseInt(newLine);
+			pos = parseInt(newLine);
 			newLine = "";
-			/*
-			while(/[0-9]|[A-F]|/.test(newLine.substring(0,1))){ //reg exp to get pos (can probably change to get whole number)
-				pos += newLine.substring(0,1);
-				newLine = newLine.substring(1);
-			}
-			*/
 			while(pos*3>machineCode.length)
 				machineCode+="00 ";
 		}
@@ -356,13 +378,10 @@ function computeMachineCode(){
 			newLine=newLine.replace(".align","");
 			var alignBytes = parseInt(newLine);
 			newLine = "";
-			while(machineCode.length%(alignBytes*3)!=0)
+			while(machineCode.length%(alignBytes*3)!=0) {
 				machineCode+="00 ";
-		if(newLine!=="")
-		{
-			document.getElementById("MachineCode").innerHTML = "Improper Input";
-			return;
-		}
+				pos++;
+			}
 	}
 	else if(newLine.indexOf(".quad")==0) // put an 8-byte value x at the current address
 		{
@@ -376,6 +395,7 @@ function computeMachineCode(){
 				machineCode+=newLine.substring(0,2)+" ";
 				newLine = newLine.substring(2);
 			}
+			pos+=8;
 		}
 		if(newLine!=="")
 		{
@@ -460,13 +480,15 @@ function Register(string) // get register number
 Main:
 popq %rax
 .quad 0xA100A200A300A400
-.align 16
+.align 0x10
 .pos 0x6A
-rrmovq %rax, r10
+rrmovq %rax, %r10
 addq %r13, %rbx
 irmovq $19, %rax
-.align 16
+.align 0x10
 ret
+
+Output:
 00 00 B0 0F 00 00 00 00 00 00 00 00 00 00 00 00
 00 00 A1 00 A2 00 A3 00 A4 00 00 00 00 00 00 00
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
@@ -478,5 +500,4 @@ ret
 00 00 00 00 00 00 00 00 00 00 30 F0 13 00 00 00
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-
 */
