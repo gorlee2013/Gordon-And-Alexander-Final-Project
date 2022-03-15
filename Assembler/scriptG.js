@@ -8,8 +8,9 @@ function computeMachineCode(){
 	var exit = 0;
 	var pos = 0; // in bytes
 	var arr = inputCode.split("\n");
+	var length = arr.length;
 	let newLine;
-	for(let i=0;i<arr.length;i++){
+	for(let i=0;i<length;i++){
 		newLine = arr[i];
 		newLine = newLine.replace(/\s+/g, "");
 		validInstruction = 0;
@@ -475,7 +476,7 @@ function Register(string) // get register number
 	else return "F"; //no register
 }
 
-/* Test:
+/* Test (just to test, does not mean anything):
 .pos 2
 Main:
 popq %rax
@@ -499,5 +500,5 @@ Output:
 00 00 00 00 00 00 00 00 00 00 60 D3 00 00 00 00
 00 00 00 00 00 00 00 00 00 00 30 F0 13 00 00 00
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
 */
