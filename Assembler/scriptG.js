@@ -158,6 +158,77 @@ function computeMachineCode(){
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
+		// jumps
+		else if(newLine.indexOf("jmp")==0) //jmp Dest
+		{
+			var pad = "";
+			machineCode+="70 "
+			newLine=newLine.replace("jmp","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
+		else if(newLine.indexOf("jle")==0) //jle Dest
+		{
+			var pad = "";
+			machineCode+="71 "
+			newLine=newLine.replace("jle","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
+		else if(newLine.indexOf("jl")==0) //jl Dest
+		{
+			var pad = "";
+			machineCode+="72 "
+			newLine=newLine.replace("jl","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
+		else if(newLine.indexOf("je")==0) //je Dest
+		{
+			var pad = "";
+			machineCode+="73 "
+			newLine=newLine.replace("je","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
+		else if(newLine.indexOf("jne")==0) //jne Dest
+		{
+			var pad = "";
+			machineCode+="74 "
+			newLine=newLine.replace("jne","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
+		else if(newLine.indexOf("jge")==0) //jge Dest
+		{
+			var pad = "";
+			machineCode+="75 "
+			newLine=newLine.replace("jge","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
+		else if(newLine.indexOf("jg")==0) //jg Dest
+		{
+			var pad = "";
+			machineCode+="76 "
+			newLine=newLine.replace("jg","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
 
 		else if(newLine.indexOf(".pos")==0) // getting position
 		{
