@@ -306,6 +306,44 @@ function computeMachineCode(){
 		}
 		//end of jumps
 
+		else if(newLine.indexOf("call")==0) //call Dest
+		{
+			var pad = "";
+			machineCode+="80 "
+			newLine=newLine.replace("call","");
+			var Dest = toHex(newLine);
+			newLine = "";
+			pad+=Dest + " ";
+			machineCode+=Padding(pad,3);
+		}
+		else if(newLine.indexOf("ret")==0) // ret
+		{
+			machineCode+="90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
+			newLine=newLine.replace("ret","");
+		}
+		else if(newLine.indexOf("pushq")==0) //pushq rA
+		{
+			var pad = "";
+			machineCode+="A0 "
+			newLine=newLine.replace("pushq","");
+			reg1 = Register(newLine);
+			newLine = newLine.substring(4);
+			machineCode+=reg1;
+			machineCode+="F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("popq")==0) //popq rA
+		{
+			var pad = "";
+			machineCode+="B0 "
+			newLine=newLine.replace("popq","");
+			reg1 = Register(newLine);
+			newLine = newLine.substring(4);
+			machineCode+=reg1;
+			machineCode+="F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+
+
+
 		else if(newLine.indexOf(".pos")==0) // getting position
 		{
 			newLine=newLine.replace(".pos","");
