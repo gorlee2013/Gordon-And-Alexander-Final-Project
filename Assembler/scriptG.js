@@ -10,7 +10,6 @@ function computeMachineCode(){
 	var arr = inputCode.split("\n");
 	var arrLength = arr.length;
 	let newLine;
-	let mem = new Array(1600); // not implemented yet
 	for(let i=0;i<arrLength;i++){
 		newLine = arr[i];
 		newLine = newLine.replace(/\s+/g, "");
@@ -39,6 +38,7 @@ function computeMachineCode(){
 			machineCode+="10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
 			newLine=newLine.replace("nop","");
 		}
+		// moves
 		else if(newLine.indexOf("rrmovq")==0) // rrmovq rA, rB
 		{
 			machineCode+="20 ";
@@ -51,6 +51,80 @@ function computeMachineCode(){
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
+		else if(newLine.indexOf("cmovle")==0) // cmovle rA, rB
+		{
+			machineCode+="21 ";
+			newLine=newLine.replace("cmovle","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("cmovl")==0) // cmovl rA, rB
+		{
+			machineCode+="22 ";
+			newLine=newLine.replace("cmovl","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("cmove")==0) // cmove rA, rB
+		{
+			machineCode+="23 ";
+			newLine=newLine.replace("cmove","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("cmovne")==0) // cmovne rA, rB
+		{
+			machineCode+="24 ";
+			newLine=newLine.replace("cmovne","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("cmovge")==0) // cmovge rA, rB
+		{
+			machineCode+="25 ";
+			newLine=newLine.replace("cmovge","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		else if(newLine.indexOf("cmovg")==0) // cmovg rA, rB
+		{
+			machineCode+="26 ";
+			newLine=newLine.replace("cmovg","");
+			reg1 = Register(newLine);
+			machineCode+=reg1;
+			newLine = newLine.substring(5);
+			reg2 = Register(newLine);
+			machineCode+=reg2;
+			newLine = newLine.substring(4);
+			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
+		}
+		// end of moves
+
 		else if(newLine.indexOf("irmovq")==0) //irmovq V, rB
 		{
 			var pad = "";
@@ -158,6 +232,7 @@ function computeMachineCode(){
 			newLine = newLine.substring(4);
 			machineCode+=" 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ";
 		}
+		//end of operations
 		// jumps
 		else if(newLine.indexOf("jmp")==0) //jmp Dest
 		{
@@ -229,6 +304,7 @@ function computeMachineCode(){
 			pad+=Dest + " ";
 			machineCode+=Padding(pad,3);
 		}
+		//end of jumps
 
 		else if(newLine.indexOf(".pos")==0) // getting position
 		{
