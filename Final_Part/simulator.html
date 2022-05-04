@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src = script.js></script>
+<body>
+
+<h1> Assembler (Alexander and Gordon)</h1>
+<textarea id="textbox" rows = "35" cols = "200" name = "InputCodeDisplay" value="12"></textarea>
+	<div><button onclick="computeMachineCode()">Compile</button></div>
+<div><textarea readonly rows = "35" cols = "200" name = "machineCodeDisplay" id="MachineCode"></textarea></div>
+	<div><bold>Assumptions</bold></div>
+<div><p>Machine Code is aligned to 16 bytes<br>Numbers are big-endian<br>All registers are %rax instead of %eax</p></div>
+<button onclick="cycle(-1)">Previous Instruction</button><button onclick="cycle(1)">Next Instruction</button>
+Input:<p id="input"></p>
+<h2>Fetch:</h2>
+<div> ifun: <p id="ifun"></p>    icode: <p id="icode"></p>    rA: <p id="rA"></p>    rB: <p id="rB"></p>    valP: <p id="valP"></p>    valC: <p id="valC"></p> </div>
+<h2>Decode:</h2>
+<div>valA: <p id="valA"></p>    valB: <p id="valB"></p>    valE: <p id="valEDe"></p>  </div>
+<h2>Execute:</h2>
+<div>valE: <p id="valEEx"></p>    CC: <p id="CC"></p>  </div>
+<h2>Memory:</h2>
+<div>valM: <p id="valM"></p>    Memory: <p id="memory"></p> </div>
+<h2>Writeback:</h2>
+<div>Register: <p id="register"></p>  </div>
+<h2>PC Update:</h2>
+<div>PC: <p id="PC"></p> </div>
+</body>
+</html>
