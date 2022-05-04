@@ -4,14 +4,18 @@
 	<script src = script.js></script>
 <body>
 
-<h1> Assembler (Alexander and Gordon)</h1>
-<textarea id="textbox" rows = "35" cols = "200" name = "InputCodeDisplay" value="12"></textarea>
+<h1> Assembler</h1>
+<textarea id="textbox" rows = "35" cols = "150" name = "InputCodeDisplay" value="0">popq %rax
+rrmovq %rax, %r10
+addq %r13, %rbx
+irmovq $19, %rax
+ret</textarea>
 	<div><button onclick="computeMachineCode()">Compile</button></div>
-<div><textarea readonly rows = "35" cols = "200" name = "machineCodeDisplay" id="MachineCode"></textarea></div>
-	<div><bold>Assumptions</bold></div>
+<div><textarea readonly rows = "35" cols = "150" name = "machineCodeDisplay" id="MachineCode" ></textarea></div>
+<div><bold>Assumptions</bold></div>
 <div><p>Machine Code is aligned to 16 bytes<br>Numbers are big-endian<br>All registers are %rax instead of %eax</p></div>
 <div><button onclick="Fetch()">Run Next Line</button></div>
 <h2>Fetch</h2>
-<div>Input:<p id="input"></p>    ifun<p id="ifun"></p>    icode<p id="icode"></p>    rA<p id="rA"></p>    rB<p id="rB"></p>    valP<p id="valP"></p>    valC<p id="valC"></p> </div>
+Input: <span id="input"></span>    <p></p>icode: <span id="icode"></span>    <p></p>ifun: <span id="ifun"></span>    <p></p>rA: <span id="rA"></span>    <p></p>rB: <span id="rB"></span>    <p></p>valP: <span id="valP"></span>    <p></p>valC: <span id="valC"></span> 
 </body>
 </html>
