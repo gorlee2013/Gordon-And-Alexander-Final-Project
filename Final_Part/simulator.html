@@ -5,10 +5,16 @@
 <body>
 
 <h1> Assembler (Alexander and Gordon)</h1>
-<textarea id="textbox" rows = "35" cols = "200" name = "InputCodeDisplay" value="12">popq %rax
+<textarea id="textbox" rows = "35" cols = "200" name = "InputCodeDisplay" value="12">halt
+nop
 rrmovq %rax, %r10
-addq %r13, %rbx
 irmovq $19, %rax
+rmmovq %rcx, 8(%rsi)
+mrmovq 5(%rdx),%r11
+subq %r13, %rbx
+jmp $3
+pushq %rdi
+popq %rax
 ret</textarea>
 	<div><button onclick="computeMachineCode()">Compile</button></div>
 <div><textarea readonly rows = "35" cols = "200" name = "machineCodeDisplay" id="MachineCode"></textarea></div>
