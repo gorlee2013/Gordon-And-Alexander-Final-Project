@@ -1,39 +1,57 @@
 var globalMachineCode;
 var i=0
+var beenCalled =0;
 function Fetch(){
-	var ot = i*48; //offset
-	var rA,rB;
+	if(beenCalled==0){
+		computeMachineCode();
+		beenCalled=1;
+	}
+	var valP = i*48; //offset
+	var rA,rB,valC;
 	let inputCode = document.getElementById("textbox").value;
 	var arr = inputCode.split("\n");
 	document.getElementById("input").innerHTML = arr[i];
-	var icode = globalMachineCode.substring(0+ot,ot+1)
+	var icode = globalMachineCode.substring(0+valP,valP+1)
 	document.getElementById("icode").innerHTML = icode;
-	var ifun = globalMachineCode.substring(1+ot,ot+2)
+	var ifun = globalMachineCode.substring(1+valP,valP+2)
 	document.getElementById("ifun").innerHTML = ifun;
 	if(icode == 2||icode==4||icode==5||icode==6)
 	{
-		rA = globalMachineCode.substring(3+ot,4+ot);
-		rB = globalMachineCode.substring(4+ot,5+ot);
+		rA = globalMachineCode.substring(3+valP,4+valP);
+		rB = globalMachineCode.substring(4+valP,5+valP);
 	}
 	else if(icode==3)
 	{
 		rA = "NA";
-		rB = globalMachineCode.substring(4+ot,5+ot);
+		rB = globalMachineCode.substring(4+valP,5+valP);
 	}
 	else if(icode=="A"||icode=="B")
 	{
-		rA = globalMachineCode.substring(3+ot,4+ot);
+		rA = globalMachineCode.substring(3+valP,4+valP);
 		rB = "NA";
 	}
-
+	else
+	{
+		rA ="NA";
+		rB = "NA";
+	}
+	if(icode == 3||icode==4||icode==5)
+	{
+		valC = globalMachineCode.substring(valP+6,valP+18);
+	}
+	if(icode == 7||icode==8)
+	{
+		valC = globalMachineCode.substring(valP+4,valP+16);
+	}
+	else
+		valC = "NA";
 	document.getElementById("rA").innerHTML = rA;
 	document.getElementById("rB").innerHTML = rB;
-
+	document.getElementById("valC").innerHTML=valC;
+	document.getElementById("valP").innerHTML=valP/3;
 
 	i++;
 }
-
-
 
 function computeMachineCode(){
 	i=0
