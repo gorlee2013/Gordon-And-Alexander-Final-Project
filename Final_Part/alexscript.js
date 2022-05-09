@@ -1,6 +1,7 @@
 var globalMachineCode;
 var i=0
 var beenCalled =0;
+const registers = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 function Fetch(){
 	if(beenCalled==0){
 		computeMachineCode();
@@ -50,8 +51,59 @@ function Fetch(){
 	document.getElementById("valC").innerHTML=valC;
 	document.getElementById("valP").innerHTML=valP/3;
 
+	Decode(rB,rA,icode);
 	i++;
 }
+
+function Decode(rB,rA,icode){
+	var valA,valB,valE;
+	if(icode==0||icode==1)
+	{
+		valA="NA";
+		valB = "NA";
+		valE = "NA"
+	}
+	if(icode==2||icode==4||icode==5||icode==6)
+	{
+		valA = registers[hexToDec(rA)];
+		valB = registers[hexToDec(rB)];
+		valE = "NA";
+	}
+	else if(icode==3)
+	{
+		valA = "NA";
+		valB = registers[hexToDec(rB)];
+		valE = "NA"
+	}
+	else if(icode=="A")
+	{
+		valA = registers[hexToDec(rA)];
+		valB = registers[4];
+		valE = "NA"
+	}
+	else if(icode==9||icode=="B")
+	{
+		valA = registers[4];
+		valB = registers[4];
+		valE = "NA";
+	}
+	else if(icode==8)
+	{
+		valA = "NA";
+		valB = registers[4];
+		valE = "NA"
+	}
+	else
+	{
+		valA="NA";
+		valB = "NA";
+		valE = "NA"
+	}
+	document.getElementById("valA").innerHTML = valA;
+	document.getElementById("valB").innerHTML = valB;
+	document.getElementById("valE").innerHTML = valE;
+}
+
 
 function computeMachineCode(){
 	i=0
@@ -475,7 +527,7 @@ function toHex (string){ // convert value to hex with 1 byte spacing
 		string = string.substring(1);
 	var n = +string;
 	n = n.toString(16); //number = parseInt(hexString, 16); to reverse
-	console.log("not spaced: " + n);
+	console.log("nvalP spaced: " + n);
 	if (n.length%2==1) {
 		n = n + "0"
 	}
@@ -483,9 +535,11 @@ function toHex (string){ // convert value to hex with 1 byte spacing
 	console.log("spaced: " + n);
 	return n;
 }
+function hexToDec(hexString){
+  return parseInt(hexString, 16);
+}
 
-
-function Padding(string){ // add padding to 16 bytes (does not add space to beginning)
+function Padding(string){ // add padding to 16 bytes (does nvalP add space to beginning)
 	var add = (48 - string.length);
 	while ((add-3) >= 0){
 		string += "00 ";
@@ -521,9 +575,9 @@ function Register(string) // get register number
 		return 6;
 	else if(string.indexOf("%rdi")==0)
 		return 7;
-	else if(string.indexOf("%rcx")==0)
+	else if(string.indexOf("%r8")==0)
 		return 8;
-	else if(string.indexOf("%rdx")==0)
+	else if(string.indexOf("%r9")==0)
 		return 9;
 	else if(string.indexOf("%r10")==0)
 		return "A";
@@ -538,7 +592,7 @@ function Register(string) // get register number
 	else return "F"; //no register
 }
 
-/* Test (just to test, does not mean anything):
+/* Test (just to test, does nvalP mean anything):
 .pos 2
 Main:
 popq %rax
