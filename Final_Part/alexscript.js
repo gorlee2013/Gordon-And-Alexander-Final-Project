@@ -104,7 +104,68 @@ function Decode(rB,rA,icode){
 	document.getElementById("valE").innerHTML = valE;
 }
 
+function Execute(valC,valP,icode,ifun,cc){
+	var valEEx=0;
+	valA = parseInt(document.getElementById("valA").innerHTML);
+	valB = parseInt(document.getElementById("valB").innerHTML);
+	if(icode==2)
+		valEEx = 0+valA;
+	else if(icode==3)
+		valEEx = 0+valC;
+	else if(icode==4||icode==5)
+	{
+		valEEx = valB+valC;
+	}
+	else if(icode==6)
+	{
+		if(ifun==0)
+			valEEx = valB+valA;
+		else if(ifun==1)
+			valEEx = valB-valA;
+		else if(ifun==2)
+			valEEx = valB-valA;
+		else if(ifun==3)
+			valEEx = valB&valA;
+		else if(ifun==4)
+			valEEx = valB^valA;
+		if(valEEx==0)
+			zf=1;
+		else 
+			zf=0;
+		if(valEEx<0)
+			sf=1;
+		else
+			sf=0;
+		if(valEEx>99999999)
+			of=1;
+		else
+			of=0;
+	}
+	else if(icode==7)
+	{
+		if(ifun==0)
+			cc=true;
+		else if(ifun==1&&(sf==1||zf==1))
+			cc=true;
+		else if(ifun==2&&sf==1)
+			cc=true;
+		else if(ifun==3&&zf==1)
+			cc=true;
+		else if(ifun==4&&zf==0)
+			cc=true;
+		else if(ifun==5&&sf!=1)
+			cc=true;
+		else if(ifun==6&&sf==0)
+			cc=true;
+	}
 
+
+	document.getElementById("CC").innerHTML = cc;
+	document.getElementById("valEEx").innerHTML = valEEx;
+}
+
+
+//pc update should turn cc to false
 function computeMachineCode(){
 	i=0
 	let inputCode = document.getElementById("textbox").value;
