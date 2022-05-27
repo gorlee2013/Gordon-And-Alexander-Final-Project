@@ -2,12 +2,19 @@ var globalMachineCode;
 var i=0
 var beenCalled =0;
 const registers = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var zf=0;
+var sf=0;
+var of=0;
+var cc=false;
+var pc=0;
 function Fetch(){
+	var valE;
 	if(beenCalled==0){
 		computeMachineCode();
 		beenCalled=1;
 	}
-	var valP = i*48; //offset
+	var valP = i*48; //48 chars per instruction
+	pc=i*16;
 	var rA,rB,valC;
 	let inputCode = document.getElementById("textbox").value;
 	var arr = inputCode.split("\n");
@@ -38,11 +45,12 @@ function Fetch(){
 	}
 	if(icode == 3||icode==4||icode==5)
 	{
-		valC = globalMachineCode.substring(valP+6,valP+18);
+		valC = hexToDec(globalMachineCode.substring(valP+6,valP+18));
 	}
-	if(icode == 7||icode==8)
+	else if(icode == 7||icode==8)
 	{
 		valC = globalMachineCode.substring(valP+4,valP+16);
+		pc+=16;
 	}
 	else
 		valC = "NA";
@@ -51,12 +59,13 @@ function Fetch(){
 	document.getElementById("valC").innerHTML=valC;
 	document.getElementById("valP").innerHTML=valP/3;
 
-	Decode(rB,rA,icode);
+	Decode(rB,rA,valE,icode);
+	Execute(valC,valP,icode,ifun,cc);
 	i++;
 }
 
-function Decode(rB,rA,icode){
-	var valA,valB,valE;
+function Decode(rB,rA,valE,icode){
+	var valA,valB;
 	if(icode==0||icode==1)
 	{
 		valA="NA";
@@ -103,13 +112,30 @@ function Decode(rB,rA,icode){
 	document.getElementById("valB").innerHTML = valB;
 	document.getElementById("valE").innerHTML = valE;
 }
-
 function Execute(valC,valP,icode,ifun,cc){
 	var valEEx=0;
 	valA = parseInt(document.getElementById("valA").innerHTML);
 	valB = parseInt(document.getElementById("valB").innerHTML);
 	if(icode==2)
+	{
 		valEEx = 0+valA;
+		if(ifun==0)
+			cc=true;
+		else if(ifun==1&&(sf==1||zf==1))
+			cc=true;
+		else if(ifun==2&&sf==1)
+			cc=true;
+		else if(ifun==3&&zf==1)
+			cc=true;
+		else if(ifun==4&&zf==0)
+			cc=true;
+		else if(ifun==5&&sf!=1)
+			cc=true;
+		else if(ifun==6&&sf==0)
+			cc=true;
+		else
+			cc=false;
+	}
 	else if(icode==3)
 		valEEx = 0+valC;
 	else if(icode==4||icode==5)
@@ -157,7 +183,17 @@ function Execute(valC,valP,icode,ifun,cc){
 			cc=true;
 		else if(ifun==6&&sf==0)
 			cc=true;
+		else
+			cc=false;
 	}
+	else if(icode ==8||icode=="A")
+	{
+		valEEx = valB-4;
+	}
+	else if(icode ==9||icode == "B")
+		valEEx = valB+4;
+	else 
+		valEEx = "NA";
 
 
 	document.getElementById("CC").innerHTML = cc;
@@ -165,7 +201,6 @@ function Execute(valC,valP,icode,ifun,cc){
 }
 
 
-//pc update should turn cc to false
 function computeMachineCode(){
 	i=0
 	let inputCode = document.getElementById("textbox").value;
