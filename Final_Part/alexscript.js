@@ -221,17 +221,28 @@ function Memory(valEEx, icode){
 	}
 
 	document.getElementById("valM").innerHTML = valM;
-	Writeback();
+	Writeback(valM);
 }
 
-function Writeback(){
+function Writeback(valM){
 	icode = document.getElementById("icode").innerHTML;
 	valEEx = document.getElementById("valEEx").innerHTML;
+	rA = document.getElementById("rA").innerHTML;
+	var register1 = getRegister(rA);
 	rB = document.getElementById("rB").innerHTML;
-	var register = getRegister(rB);
-	if (register != "NA" && valEEx != "NA" && icode != 0 && icode != 1 && icode != 2 && icode != 4 && icode != 7 && icode != 8 && icode != 9 && icode != "A" && icode != "B") {
-		document.getElementById(register).innerHTML = valEEx;
+	var register2 = getRegister(rB);
+
+	if (register2 != "NA" && valEEx != "NA" && icode == 3 || icode == 6) {
+		document.getElementById(register2).innerHTML = valEEx;
+	} else if (icode == 5) {
+		document.getElementById(register1).innerHTML = valM;
+	} else if (icode == "A" || icode == 9) {
+		document.getElementById("rsp").innerHTML = valEEx;
+	} else if (icode == "B") {
+		document.getElementById("rsp").innerHTML = valEEx;
+		document.getElementById(register1).innerHTML = valM;
 	}
+
 	pc_Update(icode);
 
 }
@@ -778,7 +789,7 @@ function getRegister(number) // get register
 	else return "NA"; //no register
 }
 
-/* Test (just to test, does nvalP mean anything):
+/* Test (just to test, does not mean anything):
 .pos 2
 Main:
 popq %rax
