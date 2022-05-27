@@ -156,7 +156,7 @@ function Execute(valC,valP,icode,ifun,cc){
 			valEEx = valB^valA;
 		if(valEEx==0)
 			zf=1;
-		else 
+		else
 			zf=0;
 		if(valEEx<0)
 			sf=1;
@@ -192,12 +192,67 @@ function Execute(valC,valP,icode,ifun,cc){
 	}
 	else if(icode ==9||icode == "B")
 		valEEx = valB+4;
-	else 
+	else
 		valEEx = "NA";
 
 
 	document.getElementById("CC").innerHTML = cc;
 	document.getElementById("valEEx").innerHTML = valEEx;
+	Memory(valEEx, icode);
+}
+
+function Memory(valEEx, icode){
+	valM = 00;
+	valA = parseInt(document.getElementById("valA").innerHTML);
+	valB = parseInt(document.getElementById("valB").innerHTML);
+	valP = parseInt(document.getElementById("valP").innerHTML);
+
+	if (icode == 4) { //rmmovq
+		valM = valA;
+	}
+	else if (icode == "B") { //pop
+		valM = valA;
+	}
+	else if (icode == 8) { //call
+		valM = valP;
+	}
+	else if (icode == 9) { //ret
+		valM = valEEx;
+	}
+
+	document.getElementById("valM").innerHTML = valM;
+	Writeback();
+}
+
+function Writeback(){
+	icode = document.getElementById("icode").innerHTML;
+	valEEx = document.getElementById("valEEx").innerHTML;
+	rB = document.getElementById("rB").innerHTML;
+	var register = getRegister(rB);
+	if (register != "NA" && valEEx != "NA" && icode != 0 && icode != 1 && icode != 2 && icode != 4 && icode != 7 && icode != 8 && icode != 9 && icode != "A" && icode != "B") {
+		document.getElementById(register).innerHTML = valEEx;
+	}
+	pc_Update(icode);
+
+}
+
+
+function pc_Update(icode){
+	valM = parseInt(document.getElementById("valM").innerHTML);
+	valP = parseInt(document.getElementById("valP").innerHTML);
+	valC = parseInt(document.getElementById("valC").innerHTML);
+
+	pc = valP;
+	if (icode == 8){ //call
+		pc = valC;
+	}
+	else if (icode == 7 && cc){
+		pc = valC;
+	}
+	else if (icode == 9) { //ret
+		pc = valM;
+	}
+	document.getElementById("PC").innerHTML = pc;
 }
 
 
@@ -688,6 +743,41 @@ function Register(string) // get register number
 	else return "F"; //no register
 }
 
+function getRegister(number) // get register
+{
+	if(number == 0)
+		return "rax";
+	else if(number == 1)
+		return "rcx";
+	else if(number == 2)
+		return "rdx";
+	else if(number == 3)
+		return "rbx";
+	else if(number == 4)
+		return "rsp";
+	else if(number == 5)
+		return "rbp";
+	else if(number == 6)
+		return "rsi";
+	else if(number == 7)
+		return "rdi";
+	else if(number == 8)
+		return "r8";
+	else if(number == 9)
+		return "r9";
+	else if(number == "A")
+		return "r10";
+	else if(number == "B")
+		return "r11";
+	else if(number == "C")
+		return "r12";
+	else if(number == "D")
+		return "r13";
+	else if(number == "E")
+		return "r14";
+	else return "NA"; //no register
+}
+
 /* Test (just to test, does nvalP mean anything):
 .pos 2
 Main:
@@ -711,5 +801,5 @@ Output:
 00 00 00 00 00 00 00 00 00 00 60 D3 00 00 00 00
 00 00 00 00 00 00 00 00 00 00 30 F0 13 00 00 00
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 */
