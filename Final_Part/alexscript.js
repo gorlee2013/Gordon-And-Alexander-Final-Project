@@ -210,13 +210,13 @@ function Memory(valEEx, icode){
 	if (icode == 4) { //rmmovq
 		valM = valA;
 	}
-	else if (icode == "B") { //pop
+	else if (icode == "A" || icode == "B") { //push, pop
 		valM = valA;
 	}
 	else if (icode == 8) { //call
 		valM = valP;
 	}
-	else if (icode == 9) { //ret
+	else if (icode == 9 || icode == 5) { //ret, mrmovq
 		valM = valEEx;
 	}
 
