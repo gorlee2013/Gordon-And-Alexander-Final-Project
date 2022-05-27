@@ -232,11 +232,11 @@ function Writeback(valM){
 	rB = document.getElementById("rB").innerHTML;
 	var register2 = getRegister(rB);
 
-	if (register2 != "NA" && valEEx != "NA" && icode == 3 || icode == 6) {
+	if (register2 != "NA" && valEEx != "NA" && (icode == 2 || icode == 3 || icode == 6)) {
 		document.getElementById(register2).innerHTML = valEEx;
 	} else if (icode == 5) {
 		document.getElementById(register1).innerHTML = valM;
-	} else if (icode == "A" || icode == 9) {
+	} else if (icode == "A" || icode == 9 || icode == 8) {
 		document.getElementById("rsp").innerHTML = valEEx;
 	} else if (icode == "B") {
 		document.getElementById("rsp").innerHTML = valEEx;
