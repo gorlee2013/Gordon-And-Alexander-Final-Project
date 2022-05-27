@@ -20,16 +20,16 @@ ret</textarea>
 <div><textarea readonly rows = "35" cols = "200" name = "machineCodeDisplay" id="MachineCode"></textarea></div>
 	<div><bold>Assumptions</bold></div>
 <div><p>Machine Code is aligned to 16 bytes<br>Numbers are big-endian<br>All registers are %rax instead of %eax</p></div>
-<button onclick="cycle(-1)">Previous Instruction</button><button onclick="Fetch()">Next Instruction</button><br><br>
+<button onclick="Fetch()">Next Instruction</button><br><br>
 Input:<span id="input"></span>
 <h2>Fetch:</h2>
-<div> ifun: <span id="ifun"></span><br> icode: <span id="icode"></span><br> rA: <span id="rA"></span><br>  rB: <span id="rB"></span><br> valP: <span id="valP"></span><br>  valC: <span id="valC"></span> </div>
+<div> icode: <span id="icode"></span><br> ifun: <span id="ifun"></span><br> rA: <span id="rA"></span><br>  rB: <span id="rB"></span><br> valP: <span id="valP"></span><br>  valC: <span id="valC"></span> </div>
 <h2>Decode:</h2>
 <div>valA: <span id="valA"></span><br>    valB: <span id="valB"></span><br>     valE: <span id="valE"></span><br>   </div>
 <h2>Execute:</h2>
 <div>valE: <span id="valEEx"></span> <br>   Condition Code: <span id="CC"></span><br>  </div>
 <h2>Memory:</h2>
-<div>valM: <p id="valM"></p>    Memory: <p id="memory"></p> </div>
+<div>valM: <p id="valM"></p>  </div>
 <h2>Writeback:</h2>
 %rax: <span id="rax"></span><br>
 %rcx: <span id="rcx"></span><br>
@@ -41,7 +41,7 @@ Input:<span id="input"></span>
 %rdi: <span id="rdi"></span><br>
 %r9: <span id="r9"></span><br>
 %r10: <span id="r10"></span><br>
-%r11: <span id="r11"></span><br>  
+%r11: <span id="r11"></span><br>
 %r12: <span id="r12"></span><br>
 %r13: <span id="r13"></span><br>
 %r14: <span id="r14"></span><br>
