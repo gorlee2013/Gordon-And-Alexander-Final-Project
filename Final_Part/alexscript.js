@@ -25,6 +25,7 @@ function Start(){
 	document.getElementById("r12").innerHTML = "";
 	document.getElementById("r13").innerHTML = "";
 	document.getElementById("r14").innerHTML = "";
+	document.getElementById("Memory").innerHTML = "";
 	Fetch();
 }
 
@@ -219,28 +220,35 @@ function Execute(valC,valP,icode,ifun,cc){
 
 	document.getElementById("CC").innerHTML = cc;
 	document.getElementById("valEEx").innerHTML = valEEx;
-	Memory(valEEx, icode);
+	Memory(icode);
 }
 
-function Memory(valEEx, icode){
-	valM = 00;
+function Memory(icode){
+	valM = "00";
 	valA = parseInt(document.getElementById("valA").innerHTML);
+	valEEx = parseInt(document.getElementById("valEEx").innerHTML);
 	valB = parseInt(document.getElementById("valB").innerHTML);
 	valP = parseInt(document.getElementById("valP").innerHTML);
 
 	if (icode == 4) { //rmmovq
-		valM = valA;
+		document.getElementById("Memory").innerHTML = globalMachineCode.replaceAt(valEEx,valA);
 	}
-	else if (icode == "A" || icode == "B") { //push, pop
-		valM = valA;
+	else if (icode == "A") { //push
+		document.getElementById("Memory").innerHTML = globalMachineCode.replaceAt(valEEx,valA);
+	}
+	else if (icode == "B"){ //pop
+		valM = globalMachineCode.substring(valA,valA+getMem(valA)).trim();
 	}
 	else if (icode == 8) { //call
-		valM = valP;
+		document.getElementById("Memory").innerHTML = globalMachineCode.replaceAt(valEEx,valP);
 	}
-	else if (icode == 9 || icode == 5) { //ret, mrmovq
-		valM = valEEx;
+	else if (icode == 5) { // mrmovq
+		valM = globalMachineCode.substring(valEEx,valEEx+getMem(valEEx)).trim();
 	}
-
+	else if (icode == 9) { //ret
+		valM = globalMachineCode.substring(valA,valA+getMem(valA)).trim();
+	}
+	valM = parseInt(valM, 2).toString(16);
 	document.getElementById("valM").innerHTML = valM;
 	Writeback(valM);
 }
@@ -810,6 +818,19 @@ function getRegister(number) // get register
 	else return "NA"; //no register
 }
 
+function getMem(x){
+	if (x%3 == 0){
+		return 6;
+	} else if (x%3 == 1){
+		return 5;
+	} else if (x%3 == 2){
+		return 6;
+	}
+}
+
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+}
 /* Test (just to test, does not mean anything):
 .pos 2
 Main:
@@ -835,5 +856,5 @@ Output:
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 
-There is also another test automatically inputted when you open Simulator.html that you can run on the browser for the different stages
+There is also another test automatically inputted when you open Simulator.html that you can run on the browser to see the different stages
 */
