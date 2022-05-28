@@ -20,7 +20,7 @@ ret</textarea>
 <div><textarea readonly rows = "35" cols = "200" name = "machineCodeDisplay" id="MachineCode"></textarea></div>
 	<div><bold>Assumptions</bold></div>
 <div><p>Machine Code is aligned to 16 bytes<br>Numbers are big-endian<br>All registers are %rax instead of %eax</p></div>
-<button onclick="Fetch()">Next Instruction</button><br><br>
+<button onclick="Start()">First Instruction</button><button onclick="Fetch()">Next Instruction</button><br><br>
 Input:<span id="input"></span>
 <h2>Fetch:</h2>
 <div> icode: <span id="icode"></span><br> ifun: <span id="ifun"></span><br> rA: <span id="rA"></span><br>  rB: <span id="rB"></span><br> valP: <span id="valP"></span><br>  valC: <span id="valC"></span> </div>
@@ -45,7 +45,6 @@ Input:<span id="input"></span>
 %r12: <span id="r12"></span><br>
 %r13: <span id="r13"></span><br>
 %r14: <span id="r14"></span><br>
-%r15: <span id="r15"></span><br>
 <h2>PC Update:</h2>
 <div>PC: <p id="PC"></p> </div>
 </body>
