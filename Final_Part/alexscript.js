@@ -7,6 +7,27 @@ var sf=0;
 var of=0;
 var cc=false;
 var pc=0;
+function Start(){
+	pc = 0;
+	i = 0
+	console.log(pc);
+	document.getElementById("rax").innerHTML = "";
+	document.getElementById("rcx").innerHTML = "";
+	document.getElementById("rdx").innerHTML = "";
+	document.getElementById("rbx").innerHTML = "";
+	document.getElementById("rsp").innerHTML = "";
+	document.getElementById("rbp").innerHTML = "";
+	document.getElementById("rsi").innerHTML = "";
+	document.getElementById("rdi").innerHTML = "";
+	document.getElementById("r9").innerHTML = "";
+	document.getElementById("r10").innerHTML = "";
+	document.getElementById("r11").innerHTML = "";
+	document.getElementById("r12").innerHTML = "";
+	document.getElementById("r13").innerHTML = "";
+	document.getElementById("r14").innerHTML = "";
+	Fetch();
+}
+
 function Fetch(){
 	var valE;
 	if(beenCalled==0){
@@ -813,4 +834,6 @@ Output:
 00 00 00 00 00 00 00 00 00 00 30 F0 13 00 00 00
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+
+There is also another test automatically inputted when you open Simulator.html that you can run on the browser for the different stages
 */
